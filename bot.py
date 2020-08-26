@@ -18,16 +18,19 @@ async def on_ready():
     print('Bot is ready.')
 
 @client.command()
+@commands.is_owner()
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
     await ctx.send(f'cogs.{extension} loaded')
 
 @client.command()
+@commands.is_owner()
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     await ctx.send(f'cogs.{extension} unloaded')
 
 @client.command()
+@commands.is_owner()
 async def reload(ctx, extension):
     client.reload_extension(f'cogs.{extension}')
     await ctx.send(f'cogs.{extension} reloaded')

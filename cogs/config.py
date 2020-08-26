@@ -7,6 +7,7 @@ class Config(commands.Cog):
         self.client = client
 
     @commands.command()
+    @commands.is_owner()
     async def shutdown(self,ctx):
         print("shutdown")
         try:
