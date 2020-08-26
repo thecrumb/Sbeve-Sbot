@@ -17,7 +17,10 @@ async def on_message(message):
 
 @client.command()
 async def ping(ctx):
-    await ctx.send('Pong!')
+    await ctx.send(f'Pong! {round(client.latency * 1000)}ms')
+
+# @client.command()
+# async def play(ctx):
 
 @client.command()
 async def lyrics(ctx):
