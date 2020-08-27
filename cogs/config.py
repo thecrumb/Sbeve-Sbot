@@ -3,18 +3,18 @@ import json
 from discord.ext import commands
 
 class Config(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
 
     @commands.command()
     @commands.is_owner()
     async def shutdown(self,ctx):
         print("shutdown")
         try:
-            await self.client.logout()
+            await self.bot.logout()
         except:
             print("EnvironmentError")
-            self.client.clear()
+            self.bot.clear()
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -38,6 +38,7 @@ class Config(commands.Cog):
 
     @commands.command()
     async def changeprefix(self, ctx, prefix):
+        """Sets a custom command prefix"""        
         with open('prefixes.json', 'r') as f:
             prefixes = json.load(f)
 
@@ -48,5 +49,5 @@ class Config(commands.Cog):
 
         await ctx.send(f'Prefix changed to: {prefix}')
 
-def setup(client):
-    client.add_cog(Config(client))
+def setup(bot):
+    bot.add_cog(Config(bot))

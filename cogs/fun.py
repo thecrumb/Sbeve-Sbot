@@ -2,8 +2,8 @@ import discord
 from discord.ext import commands
 
 class Fun(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -12,7 +12,8 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        await ctx.send(f'Pong! {round(self.client.latency * 1000)}ms')
+        """Checks the bot's response time to Discord"""
+        await ctx.send(f'Pong! {round(self.bot.latency * 1000)}ms')
 
-def setup(client):
-    client.add_cog(Fun(client))
+def setup(bot):
+    bot.add_cog(Fun(bot))

@@ -2,12 +2,27 @@ import discord
 from discord.ext import commands
 
 class Music(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
 
     # @commands.command()
-    # async def play(ctx):
+    # async def play(self, ctx):
 
+    @commands.command()
+    async def join(self, ctx):
+        """Joins a voice channel"""
+        channel = ctx.message.author.voice.channel
+
+        if ctx.voice_client is not None:
+            return await ctx.voice_client.move_to(channel)
+
+        await channel.connect()
+
+    @commands.command()
+    async def leave(self, ctx):
+        """Disconnects the bot from voice"""
+        await ctx.voice_client.disconnect()
+    
     @commands.command()
     async def lyrics(self, ctx):
         embed1 = discord.Embed(
@@ -116,5 +131,5 @@ The creeper's tryna steal all our stuff again (Come on, jab your sword down low)
         await ctx.send(embed=embed1)
         await ctx.send(embed=embed2)
 
-def setup(client):
-    client.add_cog(Music(client))
+def setup(bot):
+    bot.add_cog(Music(bot))
