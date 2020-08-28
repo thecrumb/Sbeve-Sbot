@@ -21,5 +21,10 @@ class Info(commands.Cog):
         )
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def ping(self, ctx):
+        """Checks the bot's response time to Discord"""
+        await ctx.send(f'Pong! {round(self.bot.latency * 1000)}ms')
+
 def setup(bot):
     bot.add_cog(Info(bot))

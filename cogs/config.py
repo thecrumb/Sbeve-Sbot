@@ -38,7 +38,7 @@ class Config(commands.Cog):
 
     @commands.command()
     async def changeprefix(self, ctx, prefix):
-        """Sets a custom command prefix"""        
+        """Sets a custom command prefix for this server"""        
         with open('prefixes.json', 'r') as f:
             prefixes = json.load(f)
 

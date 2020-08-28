@@ -4,7 +4,7 @@ import youtube_dl
 from discord.ext import commands
 
 # Suppress noise about console usage from errors
-youtube_dl.utils.bug_reports_message = lambda: ''
+youtube_dl.utils.bug_reports_message = lambda: '' # this doesn't actually seem to do anything
 
 ytdl_format_options = {
     'format': 'bestaudio/best',
@@ -61,9 +61,25 @@ class Music(commands.Cog):
 
         await channel.connect()
 
-    @commands.command()
+    @commands.command(aliases=['p'])
     async def play(self, ctx, *, url):
         """Joins a voice channel and plays a song given a url (e.g. YouTube)"""
+        # if url is None:
+        #     embed = discord.Embed(
+        #         title = 'Play a song!',
+        #         description = 'Type the play command + a search result or a url (e.g Youtube)\n \
+        #         You can also select one of the following songs by clicking on the reactions below',
+        #         color = discord.Color.green()
+        #     )
+        #     embed.add_field(name='1. Revenge', value='by CaptainSparklez', inline=False)
+        #     embed.add_field(name='2. Mine Diamonds', value='by Mcap Steve', inline=False)
+        #     embed.add_field(name='3. Eye Of The Spider', value='by Itsoo1', inline=False)
+        #     play_menu = await ctx.send(embed=embed)
+        #     await play_menu.add_reaction('1️⃣')
+        #     await play_menu.add_reaction('2️⃣')
+        #     await play_menu.add_reaction('3️⃣')
+        #     return
+
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop)
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
@@ -176,7 +192,7 @@ Look at me, look at you
 Take my revenge, that's what I'm gonna do
 I'm a warrior, baby, what else is new?
 And my blade's gonna tear through you, bring it''',
-            colour = discord.Colour.blue()
+            color = discord.Color.blue()
         )
         embed2 = discord.Embed(
             description =
@@ -200,7 +216,7 @@ Until the sun comes up in the morn'
 'Cause, baby, tonight (Come on, swing your sword up high)
 The creeper's tryna steal all our stuff again (Come on, jab your sword down low)
 (Woo)''',
-            colour = discord.Colour.blue()
+            color = discord.Color.blue()
         )
 
         embed1.set_thumbnail(url='https://i.ytimg.com/vi/cPJUBQd-PNM/hqdefault.jpg')

@@ -10,10 +10,5 @@ class Fun(commands.Cog):
         if 'creeper' in message.content.lower():
             await message.channel.send('AW MAN')
 
-    @commands.command()
-    async def ping(self, ctx):
-        """Checks the bot's response time to Discord"""
-        await ctx.send(f'Pong! {round(self.bot.latency * 1000)}ms')
-
 def setup(bot):
     bot.add_cog(Fun(bot))
