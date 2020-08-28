@@ -21,13 +21,14 @@ ytdl_format_options = {
 }
 
 ffmpeg_options = {
+    'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
     'options': '-vn'
 }
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
 class YTDLSource(discord.PCMVolumeTransformer):
-    def __init__(self, source, *, data, volume=0.5):
+    def __init__(self, source, *, data, volume=0.35):
         super().__init__(source, volume)
 
         self.data = data
@@ -62,7 +63,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def play(self, ctx, *, url):
-
+        """Joins a voice channel and plays a song given a url (e.g. YouTube)"""
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop)
             ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
@@ -70,9 +71,35 @@ class Music(commands.Cog):
         await ctx.send(f'Now playing: {player.title}')
 
     @commands.command()
+    async def pause(self, ctx):
+        """Pauses the current song"""
+        ctx.voice_client.pause()
+
+    @commands.command()
+    async def resume(self, ctx):
+        """Resumes the current song"""
+        ctx.voice_client.resume()
+
+    @commands.command()
+    async def stop(self, ctx):
+        """Stops playing music"""
+        ctx.voice_client.stop()
+
+    @commands.command()
     async def leave(self, ctx):
         """Disconnects the bot from voice"""
         await ctx.voice_client.disconnect()
+
+    @play.before_invoke
+    async def ensure_voice(self, ctx):
+        if ctx.voice_client is None:
+            if ctx.author.voice:
+                await ctx.author.voice.channel.connect()
+            else:
+                await ctx.send("You are not connected to a voice channel.")
+                raise commands.CommandError("Author not connected to a voice channel.")
+        elif ctx.voice_client.is_playing():
+            ctx.voice_client.stop()
 
     @commands.command()
     async def lyrics(self, ctx):
