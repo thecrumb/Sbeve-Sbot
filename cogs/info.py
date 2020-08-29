@@ -9,7 +9,7 @@ class Info(commands.Cog):
     async def about(self, ctx):
         embed = discord.Embed(
             title = 'About Sbeve',
-            description = 'Sbeve! Use .help to see all the Commands'
+            description = 'Sbeve! Use $help to see all the Commands'
         )
         await ctx.send(embed=embed)
 
