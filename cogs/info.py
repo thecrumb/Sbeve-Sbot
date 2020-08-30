@@ -15,6 +15,7 @@ class Info(commands.Cog):
 
     @commands.command()
     async def invite(self, ctx):
+        """Sends the invite link for this bot"""
         embed = discord.Embed(
             title = 'Invite Link',
             url = 'https://www.google.com/',

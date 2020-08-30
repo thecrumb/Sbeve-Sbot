@@ -51,7 +51,7 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=['j'])
     async def join(self, ctx):
         """Joins a voice channel"""
         channel = ctx.message.author.voice.channel
@@ -101,7 +101,7 @@ class Music(commands.Cog):
         """Stops playing music"""
         ctx.voice_client.stop()
 
-    @commands.command()
+    @commands.command(aliases=['l'])
     async def leave(self, ctx):
         """Disconnects the bot from voice"""
         await ctx.voice_client.disconnect()
@@ -116,6 +116,15 @@ class Music(commands.Cog):
                 raise commands.CommandError("Author not connected to a voice channel.")
         elif ctx.voice_client.is_playing():
             ctx.voice_client.stop()
+
+    @pause.before_invoke
+    @resume.before_invoke
+    @stop.before_invoke
+    @leave.before_invoke
+    async def ensure_call(self, ctx):
+        if not ctx.author.voice or ctx.author.voice.channel != ctx.voice_client.channel:
+            await ctx.send("You are not in the same voice channel as the bot.")
+            raise commands.CommandError("Author not connected to the correct voice channel.")
 
     @commands.command()
     async def lyrics(self, ctx):
