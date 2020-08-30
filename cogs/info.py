@@ -17,6 +17,7 @@ class Info(commands.Cog):
     async def invite(self, ctx):
         embed = discord.Embed(
             title = 'Invite Link',
+            url = 'https://www.google.com/',
             description = 'Add Sbeve to another server!',
         )
         await ctx.send(embed=embed)
