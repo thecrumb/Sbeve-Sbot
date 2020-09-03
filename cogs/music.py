@@ -51,7 +51,7 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=['j'])
+    @commands.command()
     async def join(self, ctx):
         """Joins a voice channel"""
         channel = ctx.message.author.voice.channel
@@ -63,8 +63,8 @@ class Music(commands.Cog):
 
     @commands.command(aliases=['p'])
     async def play(self, ctx, *, url):
-        """Joins a voice channel and plays a song given a url (e.g. YouTube)"""
-        # if url is None:
+        """Joins a voice channel and plays a song given a search result or url (e.g. YouTube)"""
+        # if not url:
         #     embed = discord.Embed(
         #         title = 'Play a song!',
         #         description = 'Type the play command + a search result or a url (e.g Youtube)\n \
@@ -101,7 +101,7 @@ class Music(commands.Cog):
         """Stops playing music"""
         ctx.voice_client.stop()
 
-    @commands.command(aliases=['l'])
+    @commands.command()
     async def leave(self, ctx):
         """Disconnects the bot from voice"""
         await ctx.voice_client.disconnect()
