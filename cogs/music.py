@@ -4,7 +4,8 @@ import youtube_dl
 from discord.ext import commands
 
 # Suppress noise about console usage from errors
-youtube_dl.utils.bug_reports_message = lambda: '' # this doesn't actually seem to do anything
+youtube_dl.utils.bug_reports_message = lambda: ''
+# this doesn't actually seem to do anything
 
 ytdl_format_options = {
     'format': 'bestaudio/best',
@@ -17,7 +18,7 @@ ytdl_format_options = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0' # bind to ipv4 since ipv6 addresses cause issues sometimes
+    'source_address': '0.0.0.0'  # bind to ipv4 since ipv6 addresses cause issues sometimes
 }
 
 ffmpeg_options = {
@@ -26,6 +27,7 @@ ffmpeg_options = {
 }
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.35):
@@ -39,13 +41,16 @@ class YTDLSource(discord.PCMVolumeTransformer):
     @classmethod
     async def from_url(cls, url, *, loop=None):
         loop = loop or asyncio.get_event_loop()
-        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
+        data = await loop.run_in_executor(
+            None, lambda: ytdl.extract_info(url, download=False))
 
         if 'entries' in data:
             # take first item from a playlist
             data = data['entries'][0]
 
-        return cls(discord.FFmpegPCMAudio(data['url'], **ffmpeg_options), data=data)
+        return cls(discord.FFmpegPCMAudio(data['url'], **ffmpeg_options),
+                   data=data)
+
 
 class Music(commands.Cog):
     def __init__(self, bot):
@@ -82,7 +87,9 @@ class Music(commands.Cog):
 
         async with ctx.typing():
             player = await YTDLSource.from_url(url, loop=self.bot.loop)
-            ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
+            ctx.voice_client.play(
+                player,
+                after=lambda e: print('Player error: %s' % e) if e else None)
 
         await ctx.send(f'Now playing: {player.title}')
 
@@ -113,7 +120,8 @@ class Music(commands.Cog):
                 await ctx.author.voice.channel.connect()
             else:
                 await ctx.send("You are not connected to a voice channel.")
-                raise commands.CommandError("Author not connected to a voice channel.")
+                raise commands.CommandError(
+                    "Author not connected to a voice channel.")
         elif ctx.voice_client.is_playing():
             ctx.voice_client.stop()
 
@@ -122,16 +130,16 @@ class Music(commands.Cog):
     @stop.before_invoke
     @leave.before_invoke
     async def ensure_call(self, ctx):
-        if not ctx.author.voice or ctx.author.voice.channel != ctx.voice_client.channel:
+        if (not ctx.author.voice or
+                ctx.author.voice.channel != ctx.voice_client.channel):
             await ctx.send("You are not in the same voice channel as the bot.")
-            raise commands.CommandError("Author not connected to the correct voice channel.")
+            raise commands.CommandError(
+                "Author not connected to the correct voice channel.")
 
     @commands.command()
     async def lyrics(self, ctx):
-        embed1 = discord.Embed(
-            title = 'Revenge',
-            description =
-'''[Intro: TryHardNinja]
+        embed1 = discord.Embed(title='Revenge',
+                               description='''[Intro: TryHardNinja]
 Creeper
 Aw man
 
@@ -201,11 +209,9 @@ Look at me, look at you
 Take my revenge, that's what I'm gonna do
 I'm a warrior, baby, what else is new?
 And my blade's gonna tear through you, bring it''',
-            color = discord.Color.blue()
-        )
-        embed2 = discord.Embed(
-            description =
-'''[Bridge: TryHardNinja & CaptainSparklez]
+                               color=discord.Color.blue())
+        embed2 = discord.Embed(description='''
+[Bridge: TryHardNinja & CaptainSparklez]
 'Cause, baby, tonight
 The creeper's tryna steal all our stuff again
 (Gather your stuff, yeah, let's take back the world)
@@ -225,14 +231,18 @@ Until the sun comes up in the morn'
 'Cause, baby, tonight (Come on, swing your sword up high)
 The creeper's tryna steal all our stuff again (Come on, jab your sword down low)
 (Woo)''',
-            color = discord.Color.blue()
-        )
+                               color=discord.Color.blue())
 
-        embed1.set_thumbnail(url='https://i.ytimg.com/vi/cPJUBQd-PNM/hqdefault.jpg')
-        embed1.set_author(name='CaptainSparklez', icon_url='https://vignette.wikia.nocookie.net/youtube/images/3/34/Cs.png/revision/latest?cb=20150203013604')
+        embed1.set_thumbnail(
+            url='https://i.ytimg.com/vi/cPJUBQd-PNM/hqdefault.jpg')
+        embed1.set_author(name='CaptainSparklez',
+                          icon_url=('https://vignette.wikia.nocookie.net/'
+                                    'youtube/images/3/34/Cs.png/revision/'
+                                    'latest?cb=20150203013604'))
 
         await ctx.send(embed=embed1)
         await ctx.send(embed=embed2)
+
 
 def setup(bot):
     bot.add_cog(Music(bot))
