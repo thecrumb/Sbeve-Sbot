@@ -14,3 +14,23 @@ However, I used "Sbeve" because:
 - The letter "B" is superior to the letter "T"
 
 The "S" in "Sbot" is added for consistency.
+
+## Bot Commands
+
+ℹ️ **Info**
+  * about: Gives details about the bot
+  * invite: Sends the invite link for this bot
+  * help: Returns this menu
+  * ping: Checks the bot's response time to Discord
+  
+🎵 **Music**
+  * join: Joins a voice channel
+  * play or p: Joins a voice channel and plays a song given a search result or url (e.g. YouTube)
+  * pause: Pauses the current song
+  * resume: Resumes the current song
+  * stop: Stops playing music
+  * leave: Disconnects the bot from voice
+  * lyrics: Shows the lyrics to Revenge by CaptainSparklez
+  
+⚙️ **Config**
+  * changeprefix: Sets a custom command prefix for this server
